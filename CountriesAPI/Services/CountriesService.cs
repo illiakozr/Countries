@@ -22,7 +22,20 @@ namespace CountriesAPI.Services
                 return new List<Country>();
             }
 
+            allCountires = FilterCountries(allCountires, requestModel);
+
             return allCountires;
+        }
+
+        private List<Country> FilterCountries(List<Country> countries, CountriesRequestModel requestModel)
+        {
+            IEnumerable<Country> filteredCountires = countries.AsEnumerable();
+            if (!string.IsNullOrEmpty(requestModel.Name))
+            {
+                filteredCountires = countries.Where(c => c.Name.Common.Contains(requestModel.Name, StringComparison.OrdinalIgnoreCase));
+            }
+
+            return filteredCountires.ToList();
         }
     }
 }
