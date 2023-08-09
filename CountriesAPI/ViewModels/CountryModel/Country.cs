@@ -1,6 +1,5 @@
 ﻿namespace CountriesAPI.ViewModels.CountryModel
 {
-#pragma warning disable CS8618
     public class Country
     {
         public Name Name { get; set; }
@@ -39,5 +38,4 @@
         public CapitalInfo CapitalInfo { get; set; }
         public PostalCode PostalCode { get; set; }
     }
-#pragma warning restore CS8618
 }

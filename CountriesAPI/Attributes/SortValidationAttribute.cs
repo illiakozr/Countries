@@ -7,10 +7,9 @@ namespace CountriesAPI.Attributes
         public override bool IsValid(object? value)
         {
             if (value == null)
-            {
                 return true;
-            }
-            if (value is string val && val != null &&
+
+            if (value is string val &&
                (val.Equals("ascend", StringComparison.OrdinalIgnoreCase) ||
                 val.Equals("descend", StringComparison.OrdinalIgnoreCase)))
                 return true;

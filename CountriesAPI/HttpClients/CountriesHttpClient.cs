@@ -1,6 +1,7 @@
 ﻿using CountriesAPI.Interfaces.HttpClients;
 using CountriesAPI.ViewModels.CountryModel;
 using Microsoft.Net.Http.Headers;
+using System.Net;
 using System.Text.Json;
 
 namespace CountriesAPI.HttpClients
@@ -9,16 +10,19 @@ namespace CountriesAPI.HttpClients
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<CountriesHttpClient> _logger;
+        private readonly IConfiguration _configuration;
 
-        public CountriesHttpClient(HttpClient httpClient, ILogger<CountriesHttpClient> logger)
+        public CountriesHttpClient(HttpClient httpClient,  ILogger<CountriesHttpClient> logger,
+            IConfiguration configuration)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         public async Task<List<Country>?> GetCountriesAsync()
         {
-            _httpClient.BaseAddress = new Uri("https://restcountries.com/v3.1/");
+            _httpClient.BaseAddress = new Uri(_configuration["CountriesRestEndpoint"]);
             _httpClient.DefaultRequestHeaders.Add(
                HeaderNames.Accept, "application/json");
 
@@ -38,7 +42,7 @@ namespace CountriesAPI.HttpClients
                 else
                 {
                     _logger.LogError("Restcountries API returned error: ", httpResponse);
-                    throw new Exception("Restcountries API returned error");
+                    throw new WebException("Restcountries API returned error");
                 }
             }
             catch (Exception ex)
