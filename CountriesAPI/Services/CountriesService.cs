@@ -34,6 +34,11 @@ namespace CountriesAPI.Services
             {
                 filteredCountires = countries.Where(c => c.Name.Common.Contains(requestModel.Name, StringComparison.OrdinalIgnoreCase));
             }
+            if (requestModel.Population != default)
+            {
+                var normalizedPopulation = requestModel.Population * 1000000; // convert to milions
+                filteredCountires = countries.Where(c => c.Population < normalizedPopulation);
+            }
 
             return filteredCountires.ToList();
         }
