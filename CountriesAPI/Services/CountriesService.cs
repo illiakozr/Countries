@@ -23,11 +23,12 @@ namespace CountriesAPI.Services
             }
 
             allCountires = FilterCountries(allCountires, requestModel);
+            allCountires = SortCountries(allCountires, requestModel);
 
             return allCountires;
         }
 
-        private List<Country> FilterCountries(List<Country> countries, CountriesRequestModel requestModel)
+        private static List<Country> FilterCountries(List<Country> countries, CountriesRequestModel requestModel)
         {
             IEnumerable<Country> filteredCountires = countries.AsEnumerable();
             if (!string.IsNullOrEmpty(requestModel.Name))
@@ -41,6 +42,23 @@ namespace CountriesAPI.Services
             }
 
             return filteredCountires.ToList();
+        }
+
+        private static List<Country> SortCountries(List<Country> countries, CountriesRequestModel requestModel)
+        {
+            if (!string.IsNullOrEmpty(requestModel.Sort))
+            {
+                if (requestModel.Sort.Equals("ascend", StringComparison.OrdinalIgnoreCase))
+                {
+                    return countries.OrderBy(c => c.Name.Common).ToList();
+                }
+                if (requestModel.Sort.Equals("descend", StringComparison.OrdinalIgnoreCase))
+                {
+                    return countries.OrderByDescending(c => c.Name.Common).ToList();
+                }
+            }
+
+            return countries;
         }
     }
 }
