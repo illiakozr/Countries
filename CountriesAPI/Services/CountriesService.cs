@@ -24,6 +24,7 @@ namespace CountriesAPI.Services
 
             allCountires = FilterCountries(allCountires, requestModel);
             allCountires = SortCountries(allCountires, requestModel);
+            allCountires = TakeFirstNCountires(allCountires, requestModel);
 
             return allCountires;
         }
@@ -56,6 +57,16 @@ namespace CountriesAPI.Services
                 {
                     return countries.OrderByDescending(c => c.Name.Common).ToList();
                 }
+            }
+
+            return countries;
+        }
+
+        private static List<Country> TakeFirstNCountires(List<Country> countries, CountriesRequestModel requestModel)
+        {
+            if (requestModel.PageSize != default)
+            {
+                return countries.Take(requestModel.PageSize).ToList();
             }
 
             return countries;
