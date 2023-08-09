@@ -1,4 +1,5 @@
-﻿using CountriesAPI.Interfaces.HttpClients;
+﻿using CountriesAPI.Helpers;
+using CountriesAPI.Interfaces.HttpClients;
 using CountriesAPI.Interfaces.Services;
 using CountriesAPI.ViewModels;
 using CountriesAPI.ViewModels.CountryModel;
@@ -31,18 +32,9 @@ namespace CountriesAPI.Services
 
         private static List<Country> FilterCountries(List<Country> countries, CountriesRequestModel requestModel)
         {
-            IEnumerable<Country> filteredCountires = countries.AsEnumerable();
-            if (!string.IsNullOrEmpty(requestModel.Name))
-            {
-                filteredCountires = countries.Where(c => c.Name.Common.Contains(requestModel.Name, StringComparison.OrdinalIgnoreCase));
-            }
-            if (requestModel.Population != default)
-            {
-                var normalizedPopulation = requestModel.Population * 1000000; // convert to milions
-                filteredCountires = countries.Where(c => c.Population < normalizedPopulation);
-            }
-
-            return filteredCountires.ToList();
+            return countries.AsQueryable()
+                            .WhereIf(!string.IsNullOrEmpty(requestModel.Name), c => c.Name.Common.Contains(requestModel.Name, StringComparison.OrdinalIgnoreCase))
+                            .WhereIf(requestModel.Population != default, c => c.Population < requestModel.Population * 1000000).ToList();
         }
 
         private static List<Country> SortCountries(List<Country> countries, CountriesRequestModel requestModel)
