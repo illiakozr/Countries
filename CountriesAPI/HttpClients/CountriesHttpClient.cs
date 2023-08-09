@@ -20,7 +20,7 @@ namespace CountriesAPI.HttpClients
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        public async Task<List<Country>?> GetCountriesAsync()
+        public async Task<List<Country>> GetCountriesAsync()
         {
             _httpClient.BaseAddress = new Uri(_configuration["CountriesRestEndpoint"]);
             _httpClient.DefaultRequestHeaders.Add(

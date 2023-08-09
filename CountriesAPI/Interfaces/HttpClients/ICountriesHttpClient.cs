@@ -4,6 +4,6 @@ namespace CountriesAPI.Interfaces.HttpClients
 {
     public interface ICountriesHttpClient
     {
-        Task<List<Country>?> GetCountriesAsync();
+        Task<List<Country>> GetCountriesAsync();
     }
 }
